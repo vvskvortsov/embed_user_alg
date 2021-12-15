@@ -39,6 +39,10 @@
 #include "clock_config.h"
 #include "MK66F18.h"
 #include "fsl_debug_console.h"
+
+
+#include "FreeRTOS.h"
+#include "task.h"
 /* TODO: insert other include files here. */
 
 /* TODO: insert other definitions and declarations here. */
@@ -46,27 +50,51 @@
 /*
  * @brief   Application entry point.
  */
+
+
+void task1 (void* y) {
+	volatile int x = 0;
+	for (;;);
+}
+
+
 int main(void) {
 
-    /* Init board hardware. */
-    BOARD_InitBootPins();
-    BOARD_InitBootClocks();
-    BOARD_InitBootPeripherals();
+	/* Init board hardware. */
+	BOARD_InitBootPins();
+	BOARD_InitBootClocks();
+	BOARD_InitBootPeripherals();
 #ifndef BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL
-    /* Init FSL debug console. */
-    BOARD_InitDebugConsole();
+	/* Init FSL debug console. */
+	BOARD_InitDebugConsole();
 #endif
 
-    PRINTF("Hello World\n");
+	PRINTF("Hello World\n");
 
-    /* Force the counter to be placed into memory. */
-    volatile static int i = 0 ;
-    /* Enter an infinite loop, just incrementing a counter. */
-    while(1) {
-        i++ ;
-        /* 'Dummy' NOP to allow source level single stepping of
-            tight while() loop */
-        __asm volatile ("nop");
-    }
-    return 0 ;
+	/* Force the counter to be placed into memory. */
+	volatile static int i = 0;
+
+	/* Start the two tasks as described in the comments at the top of this
+	 file. */
+	xTaskCreate(task1, /* The function that implements the task. */
+	"Rx", /* The text name assigned to the task - for debug only as it is not used by the kernel. */
+	configMINIMAL_STACK_SIZE, /* The size of the stack to allocate to the task. */
+	NULL, /* The parameter passed to the task - not used in this simple case. */
+	1,/* The priority assigned to the task. */
+	NULL); /* The task handle is not required, so NULL is passed. */
+
+	//xTaskCreate( prvQueueSendTask, "TX", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_SEND_TASK_PRIORITY, NULL );
+
+	/* Start the tasks and timer running. */
+	vTaskStartScheduler();
+
+	/* Enter an infinite loop, just incrementing a counter. */
+	while (1) {
+		i++;
+		/* 'Dummy' NOP to allow source level single stepping of
+		 tight while() loop */
+		__asm volatile ("nop");
+	}
+	return 0;
 }
+

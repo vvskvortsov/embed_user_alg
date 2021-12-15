@@ -6,7 +6,7 @@
  * Generated linker script file for MK66FN2M0xxx18
  * Created from library.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.30
- * MCUXpresso IDE v11.4.1 [Build 6260] [2021-09-15] on Oct 31, 2021, 8:50:47 PM
+ * MCUXpresso IDE v11.4.1 [Build 6260] [2021-09-15] on 15 дек. 2021 г., 14:56:43
  */
 
 GROUP (

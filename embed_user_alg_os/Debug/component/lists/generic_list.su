@@ -1,5 +1,5 @@
-D:\work\prog\user_alg_embedded\embed_user_alg_os\drivers/fsl_common.h:528:28:DisableGlobalIRQ	16	static
-D:\work\prog\user_alg_embedded\embed_user_alg_os\drivers/fsl_common.h:559:24:EnableGlobalIRQ	24	static
+J:\Dev\local_mode\embed_user_alg\embed_user_alg_os\drivers/fsl_common_arm.h:568:24:DisableGlobalIRQ	16	static
+J:\Dev\local_mode\embed_user_alg\embed_user_alg_os\drivers/fsl_common_arm.h:595:20:EnableGlobalIRQ	24	static
 ../component/lists/generic_list.c:17:22:LIST_Scan	24	static
 ../component/lists/generic_list.c:52:6:LIST_Init	16	static
 ../component/lists/generic_list.c:75:15:LIST_GetList	16	static

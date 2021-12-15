@@ -11,15 +11,15 @@ RM := rm -rf
 -include utilities/subdir.mk
 -include startup/subdir.mk
 -include source/subdir.mk
+-include freertos/freertos_kernel/portable/MemMang/subdir.mk
+-include freertos/freertos_kernel/portable/GCC/ARM_CM4F/subdir.mk
+-include freertos/freertos_kernel/subdir.mk
 -include drivers/subdir.mk
 -include device/subdir.mk
 -include component/uart/subdir.mk
 -include component/serial_manager/subdir.mk
 -include component/lists/subdir.mk
 -include board/subdir.mk
--include amazon-freertos/freertos_kernel/portable/MemMang/subdir.mk
--include amazon-freertos/freertos_kernel/portable/GCC/ARM_CM4F/subdir.mk
--include amazon-freertos/freertos_kernel/subdir.mk
 -include subdir.mk
 -include objects.mk
 
