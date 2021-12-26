@@ -1,0 +1,10 @@
+https://habr.com/ru/post/191058/
+https://mcuoneclipse.com/2013/04/14/text-data-and-bss-code-and-data-size-explained/
+http://www.bravegnu.org/gnu-eprog/c-startup.html
+https://pabloariasal.github.io/2020/01/02/static-variable-initialization/
+https://gcc.gnu.org/onlinedocs/gccint/Initialization.html
+http://fastbitlab.com/arm-cortex-m-processor/
+https://habr.com/ru/post/218825/
+https://habr.com/ru/company/embox/blog/539572/
+https://www.youtube.com/watch?v=3brOzLJmeek&ab_channel=EmbeddedSystemswithARMCortex-MMicrocontrollersinAssemblyLanguageandC
+https://habr.com/ru/company/aladdinrd/blog/338806/
