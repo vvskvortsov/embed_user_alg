@@ -1,0 +1,2 @@
+J:\slavik2\embed_user_alg\boot\utilities/fsl_debug_console.h:154:24:DbgConsole_Init	24	static
+../board/board.c:26:6:BOARD_InitDebugConsole	16	static
