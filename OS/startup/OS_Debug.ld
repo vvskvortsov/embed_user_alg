@@ -92,12 +92,6 @@ SECTIONS
         LONG(LOADADDR(.data));
         LONG(    ADDR(.data));
         LONG(  SIZEOF(.data));
-        LONG(LOADADDR(.data_RAM2));
-        LONG(    ADDR(.data_RAM2));
-        LONG(  SIZEOF(.data_RAM2));
-        LONG(LOADADDR(.data_RAM3));
-        LONG(    ADDR(.data_RAM3));
-        LONG(  SIZEOF(.data_RAM3));
         __data_section_table_end = .;
         __bss_section_table = .;
         LONG(    ADDR(.bss));
@@ -120,6 +114,24 @@ SECTIONS
         KEEP(*(.FlashConfig))
         PROVIDE(__FLASH_CONFIG_END__ = .) ;
     } > os_m_flash_config = 0xEE
+	
+	
+	
+	 /*
+     * for exception handling/unwind - some Newlib functions (in common
+     * with C++ and STDC++) use this.
+     */
+    .ARM.extab : ALIGN(8)
+    {
+        *(.ARM.extab* .gnu.linkonce.armextab.*)
+    } > os_m_text
+
+    .ARM.exidx : ALIGN(8)
+    {
+        __exidx_start = .;
+        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+        __exidx_end = .;
+    } > os_m_text
 	
 	
      /* MAIN TEXT SECTION */
@@ -161,7 +173,7 @@ SECTIONS
             . = ALIGN(8);
             /* End C++ */
     } > os_m_text
- 
+ 	OS_TEXT_END = .; 
     _etext = .;
         
  
@@ -172,40 +184,6 @@ SECTIONS
     } > SRAM_UPPER AT> SRAM_UPPER
     /* DATA section for SRAM_LOWER */
 
-    .data_RAM2 : ALIGN(8)
-    {
-        FILL(0xff)
-        PROVIDE(__start_data_RAM2 = .) ;
-        PROVIDE(__start_data_SRAM_LOWER = .) ;
-        *(.ramfunc.$RAM2)
-        *(.ramfunc.$SRAM_LOWER)
-        *(.data.$RAM2)
-        *(.data.$SRAM_LOWER)
-        *(.data.$RAM2.*)
-        *(.data.$SRAM_LOWER.*)
-        . = ALIGN(8) ;
-        PROVIDE(__end_data_RAM2 = .) ;
-        PROVIDE(__end_data_SRAM_LOWER = .) ;
-     } > SRAM_LOWER AT>os_m_text
-
-    /* DATA section for FLEX_RAM */
-
-    .data_RAM3 : ALIGN(8)
-    {
-        FILL(0xff)
-        PROVIDE(__start_data_RAM3 = .) ;
-        PROVIDE(__start_data_FLEX_RAM = .) ;
-        *(.ramfunc.$RAM3)
-        *(.ramfunc.$FLEX_RAM)
-        *(.data.$RAM3)
-        *(.data.$FLEX_RAM)
-        *(.data.$RAM3.*)
-        *(.data.$FLEX_RAM.*)
-        . = ALIGN(8) ;
-        PROVIDE(__end_data_RAM3 = .) ;
-        PROVIDE(__end_data_FLEX_RAM = .) ;
-     } > FLEX_RAM AT>os_m_text
-
     /* MAIN DATA SECTION */
     .uninit_RESERVED (NOLOAD) : ALIGN(8)
     {
@@ -214,6 +192,9 @@ SECTIONS
        . = ALIGN(8) ;
         _end_uninit_RESERVED = .;
     } > SRAM_UPPER AT> SRAM_UPPER
+
+
+
 
     /* Main DATA section (SRAM_UPPER) */
     .data : ALIGN(8)
@@ -233,6 +214,8 @@ SECTIONS
        PROVIDE(__end_data_RAM = .) ;
        PROVIDE(__end_data_SRAM_UPPER = .) ;
     } > SRAM_UPPER AT>os_m_text
+    
+    OS_DATA_END = OS_TEXT_END + SIZEOF(.data);
 
     /* BSS section for SRAM_LOWER */
     .bss_RAM2 : ALIGN(8)
@@ -318,21 +301,7 @@ SECTIONS
        PROVIDE(__end_noinit_SRAM_UPPER = .) ;        
     } > SRAM_UPPER AT> SRAM_UPPER
 
-    /*
-     * for exception handling/unwind - some Newlib functions (in common
-     * with C++ and STDC++) use this.
-     */
-    .ARM.extab : ALIGN(8)
-    {
-        *(.ARM.extab* .gnu.linkonce.armextab.*)
-    } > os_m_text
 
-    .ARM.exidx : ALIGN(8)
-    {
-        __exidx_start = .;
-        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-        __exidx_end = .;
-    } > os_m_text
 
     /* Reserve and place Heap within memory map */
     _HeapSize = 0x1000;
@@ -370,5 +339,5 @@ SECTIONS
     
     
     __boot_os_start = ORIGIN(os_m_interrupts);
-  	__boot_os_end = .;
+  	__boot_os_end = OS_DATA_END;
 }

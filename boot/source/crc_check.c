@@ -28,6 +28,13 @@ static int8_t boot_init_os_header()
 	}
 }
 
+static uint32_t __attribute__((optimize("-O0"))) boot_calc_os_crc() //не снимать оптимизацию, компилятор переворачивает первое считывание флеш
+{
+	volatile uint32_t crc = mk_crc_calc((uint8_t*)os_header.os_start, (os_header.os_end - os_header.os_start));
+	return crc;
+}
+
+
 static int8_t check_os_crc() {
 
 	boot_init_os_header();
@@ -51,10 +58,7 @@ int check_start() {
 	}
 
 	// Если CRC ОС не валидна
-	uint8_t ret = check_os_crc();
-	if (ret != RET_OK) {
-	}
-	return 0;
+	return check_os_crc();
 }
 
 

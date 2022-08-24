@@ -40,6 +40,9 @@
 #include "MK66F18.h"
 
 
+
+#include "return_code.h"
+
 extern char __boot_os_header_start; /*!< Адрес начала заголовка прошивки ОС. */
 extern char __boot_os_start; /*!< Адрес начала прошивки ОС. */
 extern char __boot_os_end; /*!< Адрес конца текущей прошивки ОС. */
@@ -57,6 +60,8 @@ void start_os(unsigned long os_link_location)
 	os_code_entry(); // Set programm counter
 }
 
+int check_start();
+
 
 int main(void) {
 
@@ -71,9 +76,14 @@ int main(void) {
 
     printf("boot started...\n");
 
+    if (check_start() == RET_OK) {
+    	printf("crc check passed...\n");
+    	start_os((unsigned long) &__boot_os_start);
+    }
+
+    printf("crc check failed. Stay in boot...\n");
 
 
-    start_os((unsigned long) &__boot_os_start);
 
 
 
