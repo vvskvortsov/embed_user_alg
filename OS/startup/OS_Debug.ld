@@ -72,6 +72,13 @@ ENTRY(ResetISR)
 SECTIONS
 {
 	
+	.os_header :
+	{  
+	  . = ALIGN(4);
+	  KEEP(*(.os_wrap_header))
+	} > os_m_header 
+	
+	
 	/* The startup code goes first into internal flash */
     .interrupts :
     {
@@ -359,4 +366,9 @@ SECTIONS
     _image_start = LOADADDR(.text);
     _image_end = LOADADDR(.data) + SIZEOF(.data);
     _image_size = _image_end - _image_start;
+    
+    
+    
+    __boot_os_start = ORIGIN(os_m_interrupts);
+  	__boot_os_end = .;
 }
