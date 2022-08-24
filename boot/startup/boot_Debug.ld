@@ -26,7 +26,7 @@ MEMORY
   m_reserv_1            (RX)  : ORIGIN = 0x00006000, LENGTH = 0x00000800
   m_reserv_2		    (RX)  : ORIGIN = 0x00006800, LENGTH = 0x00000800
   
-  os_m_header           (RX)  : ORIGIN = 0x00007000, LENGTH = 0x00000200 /*Хотел сделать 100, но почему то контроллер падает в хардфалт*/
+  os_m_header           (RX)  : ORIGIN = 0x00007000, LENGTH = 0x00000200 
   os_m_interrupts		(RX)  : ORIGIN = 0x00007200, LENGTH = 0x00000400
   os_m_flash_config     (RX)  : ORIGIN = 0x00007600, LENGTH = 0x00000010
   os_m_text             (RX)  : ORIGIN = 0x00007610, LENGTH = 0x000179F0
@@ -37,6 +37,8 @@ MEMORY
   
   
   SRAM_UPPER (rwx) : ORIGIN = 0x20000000, LENGTH = 0x30000 /* 192K bytes (alias RAM) */  
+  
+  
   SRAM_LOWER (rwx) : ORIGIN = 0x1fff0000, LENGTH = 0x10000 /* 64K bytes (alias RAM2) */  
   FLEX_RAM (rwx) : ORIGIN = 0x14000000, LENGTH = 0x1000 /* 4K bytes (alias RAM3) */  
   
@@ -64,6 +66,13 @@ ENTRY(ResetISR)
 
 SECTIONS
 {
+	
+	 .boot_header :
+	 {  
+	 	FILL(0xff)
+	    . = ALIGN(4);
+	    KEEP(*(.boot_wrap_header))
+	 } > boot_m_header
 	
 	/* The startup code goes first into internal flash */
     .interrupts :
@@ -323,9 +332,10 @@ SECTIONS
     
     
     
-    __boot_os_start = ORIGIN(os_m_interrupts);
-  	/*__boot_os_end = OS_TEXT_END;
- 	__boot_os_header_start = ORIGIN(os_m_header);
+  __boot_os_header_start = ORIGIN(os_m_header);
+  __boot_os_mem_end = ORIGIN(alg_m_text) + LENGTH(alg_m_text);
+  __boot_os_start = ORIGIN(os_m_interrupts);
+ 	/*
  	__boot_os_mem_end = ORIGIN(ALG_TEXT) + LENGTH(ALG_TEXT);
  	__boot_header = ORIGIN(boot_m_header);*/
     
